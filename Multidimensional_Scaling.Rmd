@@ -1,0 +1,69 @@
+---
+title: "Multidimensional Scaling"
+author: "Aravind"
+date: "Monday, June 06, 2016"
+output: html_document
+---
+clustering is a key component within R, that allows you to group similar sets of objects together.
+classical multidimensional scaling using cmdscale in R using cmdscale function, using this function we can understant the similarities and disimilarites between records based on a measure of distance or metric between them
+---
+for this example we use the eurodist dataset to understant the cmdscale function..
+---
+```{r}
+summary(eurodist)
+
+```
+There are 21 major europion cities in this dataset..
+```{r}
+as.matrix(eurodist)[1:5, 1:5]
+
+```
+The above subset lists (first 5-5 values) of the distance matrix represents the travel distance between 21 European cities in kilometers
+
+Let us call cmdscale function on eurodist (remember distance is already caluclated in metrix..)
+
+```{r}
+msd<- cmdscale(eurodist)
+msd
+
+```
+cmdscale transformed the 21-dimensional metrix into 2 dimensions, now we can use plot function to plot easily..
+
+Let us plot the 2 dimension metrix..
+```{r}
+plot(msd)
+
+```
+
+
+so as you can see in the plot, you will notice near the center is where most of the cities are clustred.. which is the mail center of the major european cities... and as we move cites go forther away.. on the top right side is the athens..
+
+graph is not much usefull with out labels lets plot with the labels..
+
+```{r}
+plot(msd[,1],-msd[,2],type="n")
+text(msd[,1],-msd[,2],rownames(msd))
+```
+
+-msd[,2] is to flipp the Y axis 
+
+
+now let us see how to apply MDS on non-geographic data, which was not prepared to be a distance matrix.. and plot the results 
+for this we use the mtcars dataset 
+```{r}
+summary(mtcars)
+head(mtcars)
+```
+
+
+before we call the cmdscale function we need to call the dist function to calculate the distance then we can call the cmdscale function, and plot the results with no axis elements
+
+```{r}
+mds <- cmdscale(dist(mtcars))
+plot(mds, type = 'n', axes = FALSE, xlab = '', ylab = '')
+text(mds[, 1], mds[, 2], rownames(mds))
+```
+
+The distance between the elements was computed by MDS, which took into account all the 11 original numeric variables, and it makes vert easy to identify the similar and very different car types
+
+
